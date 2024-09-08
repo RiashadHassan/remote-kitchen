@@ -19,3 +19,8 @@ pip install -r requirements/development.txt
 ```bash
  python manage.py create_fake_data
 ```
+### IF THE URL PATTERN IS CONFUSING TO YOU, PLEASE REFER TO THE SWAGGER API DOCUMENTATION:
+ LINK : 
+ ```bash
+http://127.0.0.1:8000/api/common/swagger/docs/#
+```
