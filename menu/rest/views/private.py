@@ -15,8 +15,27 @@ class MenuListCreatePrivateView(ListCreateAPIView):
         return Menu.objects.filter(
             status=Status.ACTIVE,
             restaurant__uid=restaurant_uid,
-        ).prefetch_related("menuitems_set")
+        ).prefetch_related("menuitem_set")
 
 
 class MenuDetailsPrivateView(RetrieveUpdateDestroyAPIView):
     serializer_class = MenuDetailsSerializer
+    permission_classes = [IsOrganizationOwner, IsOrganizationAdmin]
+
+    def get_object(self):
+        restaurant_uid = self.kwargs.get("restaurant_uid", None)
+        menu_uid = self.kwargs.get("menu_uid", None)
+        return (
+            Menu.objects.prefetch_related("menuitem_set")
+            .filter(
+                restaurant__uid=restaurant_uid,
+            )
+            .get(
+                uid=menu_uid,
+            )
+        )
+
+    def perform_destroy(self, instance):
+        # soft deleting the menu
+        instance.status = Status.INACTIVE
+        instance.save()

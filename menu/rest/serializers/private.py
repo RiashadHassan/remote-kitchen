@@ -49,7 +49,10 @@ class MenuListCreateSerializer(serializers.ModelSerializer):
 
 
 class MenuDetailsSerializer(serializers.ModelSerializer):
-    items = MenuItemPrivateSlimSerializer(source="menuitem_set", read_only=True)
+    restaurant = OrganizationSlimSerializer(read_only=True)
+    items = MenuItemPrivateSlimSerializer(
+        source="menuitem_set", read_only=True, many=True
+    )
 
     class Meta:
         model = Menu
