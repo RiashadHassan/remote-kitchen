@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from order.models import Order, OrderItem
+from order.serializers import CreateOrderSerializer
 
 
 class CheckoutView(CreateAPIView):
@@ -23,8 +24,6 @@ class CheckoutView(CreateAPIView):
         order = Order.objects.create(
             user=request.user, total_amount=total_amount, delivery_status="Pending"
         )
-
-        order_confirmed.send(sender=self.__class__, order=order)
 
         for cart_item in selected_cart_items:
             OrderItem.objects.create(

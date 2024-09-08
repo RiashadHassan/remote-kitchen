@@ -5,6 +5,7 @@ from ..serializers.public import (
     MenuGlobalListSerializer,
     RestaurantMenuListSerializer,
     MenuDetailsPublicSerializer,
+    MenuItemGlobalListSerializer,
 )
 from common.choices import Status
 from menu.models import Menu, MenuItem
@@ -12,6 +13,16 @@ from menu.models import Menu, MenuItem
 
 class MenuGlobalListView(ListAPIView):
     serializer_class = MenuGlobalListSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Menu.objects.prefetch_related("menuitem_set").filter(
+            status=Status.ACTIVE
+        )
+
+
+class MenuItemGlobalListView(ListAPIView):
+    serializer_class = MenuItemGlobalListSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):

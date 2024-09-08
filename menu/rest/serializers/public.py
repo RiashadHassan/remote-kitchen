@@ -56,3 +56,7 @@ class MenuDetailsPublicSerializer(serializers.ModelSerializer):
             "tag_line",
             "items",
         ]
+
+
+class MenuItemGlobalListSerializer(serializers.ModelSerializer):
+    pass

@@ -7,6 +7,8 @@ from menu.models import Menu, MenuItem
 from common.rest.serializers.slim_serializers import (
     MenuItemPrivateSlimSerializer,
     OrganizationSlimSerializer,
+    MenuPrivateSlimSerializer,
+    MenuPublicSlimSerializer,
 )
 
 
@@ -61,4 +63,48 @@ class MenuDetailsSerializer(serializers.ModelSerializer):
             "name",
             "tag_line",
             "items",
+        ]
+
+
+class MenuItemListCreateSerializer(serializers.ModelSerializer):
+    menu = MenuPrivateSlimSerializer(read_only=True)
+
+    class Meta:
+        model = MenuItem
+        fields = [
+            "uid",
+            "menu",
+            "name",
+            "slug",
+            "price",
+        ]
+        read_only_fields = ["uid", "slug"]
+
+    @transaction.atomic
+    def create(self, validated_data):
+        menu_uid = self.context["view"].kwargs.get("menu_uid", None)
+
+        if menu_uid:
+            try:
+
+                menu = Menu.objects.get(uid=menu_uid)
+                menu_item = MenuItem.objects.create(menu=menu, **validated_data)
+
+            except Menu.DoesNotExist:
+                raise serializers.ValidationError("INVALID UID FOR MENU")
+
+        return menu_item
+
+
+class MenuItemDetailsSerializer(serializers.ModelSerializer):
+    menu = MenuPrivateSlimSerializer(read_only=True)
+
+    class Meta:
+        model = MenuItem
+        fields = [
+            "uid",
+            "menu",
+            "name",
+            "slug",
+            "price",
         ]

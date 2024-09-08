@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
 from core.models import User, Organization
-from menu.models import MenuItem
+from menu.models import MenuItem, Menu
 
 
 class OrganizationSlimSerializer(ModelSerializer):
@@ -23,6 +23,29 @@ class UserSlimSerializer(ModelSerializer):
             "last_name",
             "slug",
             "uid",
+        ]
+        read_only_fields = fields
+
+
+class MenuPublicSlimSerializer(ModelSerializer):
+    class Meta:
+        model = Menu
+        fields = [
+            "name",
+            "slug",
+            "tag_line",
+        ]
+        read_only_fields = fields
+
+
+class MenuPrivateSlimSerializer(ModelSerializer):
+    class Meta:
+        model = Menu
+        fields = [
+            "name",
+            "uid",
+            "slug",
+            "tag_line",
         ]
         read_only_fields = fields
 
