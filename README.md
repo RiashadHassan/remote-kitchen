@@ -24,3 +24,5 @@ pip install -r requirements/development.txt
  ```bash
 http://127.0.0.1:8000/api/common/swagger/docs/#
 ```
+
+Due to time constraints, i have not been able to complete the project entirely. but most of it works :) . 
